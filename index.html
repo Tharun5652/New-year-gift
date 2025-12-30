@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Love</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* --- CSS STYLES --- */
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            color: #444;
+        }
+
+        .main-card {
+            width: 90%;
+            max-width: 400px;
+            height: 85vh;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .screen {
+            flex: 1;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            overflow-y: auto;
+            animation: fadeIn 0.5s ease;
+        }
+        .active { display: flex; }
+        @keyframes fadeIn { from{opacity:0; transform: translateY(10px);} to{opacity:1; transform: translateY(0);} }
+
+        /* 1. Envelope */
+        .envelope-wrapper { 
+            cursor: pointer; 
+            transition: transform 0.3s; 
+            background: #fff;
+            padding: 50px;
+            border-radius: 50%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+        .envelope-wrapper:hover { transform: scale(1.05); }
+        .envelope { font-size: 80px; }
+        .instruction { color: #ff6b6b; font-weight: 600; font-size: 1.4rem; }
+
+        /* 2. Bear Prank */
+        .gif-container { min-height: 180px; display: flex; align-items: center; justify-content: center; }
+        .gif-container img { max-width: 180px; height: auto; object-fit: contain; }
+        .title { font-size: 24px; margin: 20px 0; color: #333; font-weight: 700; }
+        .btn-container { display: flex; gap: 15px; margin-top: 10px; }
+        .btn {
+            padding: 12px 30px; border: none; border-radius: 50px;
+            font-size: 16px; font-weight: 600; cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .yes-btn { background: #ff6b6b; color: white; }
+        .no-btn { background: #f1f3f5; color: #333; }
+        
+        /* 3. Gifts Menu (4 Boxes) */
+        .gift-grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 20px; 
+            margin-top: 20px; 
+            width: 100%;
+        }
+        .gift-box-wrapper { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            cursor: pointer; 
+            background: white;
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+        }
+        .gift-box-wrapper:active { transform: scale(0.95); }
+        .gift-box { font-size: 40px; margin-bottom: 5px; }
+        .gift-label { font-size: 12px; font-weight: bold; color: #888; text-transform: uppercase; }
+
+        /* Content Areas */
+        .cursive { font-family: 'Dancing Script', cursive; color: #ff6b6b; }
+        
+        .photo-frame {
+            background: white; padding: 10px 10px 40px 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            transform: rotate(-2deg); width: 75%; margin-bottom: 20px; border-radius: 4px;
+        }
+        .photo-frame img { width: 100%; display: block; border-radius: 2px; }
+
+        .video-wrapper {
+            background: black; padding: 5px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            width: 90%; border-radius: 10px; margin-bottom: 20px;
+            display: flex; justify-content: center; align-items: center;
+        }
+        .video-wrapper video { width: 100%; border-radius: 5px; display: block; max-height: 400px; }
+
+        .certificate {
+            border: 2px solid #e0b25d; padding: 20px; width: 85%;
+            background: #fff; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+        .certificate:before {
+            content: ''; position: absolute; top: 5px; left: 5px; right: 5px; bottom: 5px;
+            border: 1px dashed #e0b25d;
+        }
+        .badge { font-size: 40px; margin-top: 10px; }
+
+        .coupon-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; margin-top: 20px; }
+        .coupon {
+            background: white; color: #ff6b6b; padding: 15px 5px;
+            border-radius: 12px; font-size: 12px; font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #ffe3e3;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        .back-btn {
+            margin-top: 20px;
+            background: #f1f3f5; color: #444;
+            padding: 10px 25px; border-radius: 30px;
+            font-size: 13px; cursor: pointer; font-weight: 600;
+            border: none;
+        }
+
+        /* Hide scrollbar */
+        .screen::-webkit-scrollbar { width: 0px; background: transparent; }
+
+    </style>
+</head>
+<body>
+
+    <audio id="bg-music" loop>
+        <source src="song.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="main-card">
+        <div id="screen1" class="screen active" onclick="nextScreen(2)">
+            <div class="envelope-wrapper">
+                <div class="envelope">💌</div>
+            </div>
+            <p class="instruction">A New Year Surprise<br>For You</p>
+        </div>
+
+        <div id="screen2" class="screen">
+            <div class="gif-container">
+                <img id="bear-img" src="cute.gif" alt="Cute Bear">
+            </div>
+            <h2 id="question-text" class="title">PLS ACCEPT THE GIFT</h2>
+            <div id="btn-group" class="btn-container">
+                <button class="btn yes-btn" onclick="nextScreen(3)">YES ❤️</button>
+                <button class="btn no-btn" onclick="makeBearAngry()">NO</button>
+            </div>
+        </div>
+
+        <div id="screen3" class="screen">
+            <h2 class="title" style="margin-bottom: 10px;">YOUR GIFTS!</h2>
+            <p style="font-size: 12px; color: #888; margin: 0;">(Open them one by one)</p>
+            
+            <div class="gift-grid">
+                <div class="gift-box-wrapper" onclick="openBox('box-photo')">
+                    <div class="gift-box">🎁</div>
+                    <div class="gift-label">Our Photo</div>
+                </div>
+                <div class="gift-box-wrapper" onclick="openBox('box-video')">
+                    <div class="gift-box">🎥</div>
+                    <div class="gift-label">Our Video</div>
+                </div>
+                <div class="gift-box-wrapper" onclick="openBox('box-letter')">
+                    <div class="gift-box">💌</div>
+                    <div class="gift-label">My Letter</div>
+                </div>
+                <div class="gift-box-wrapper" onclick="openBox('box-coupons')">
+                    <div class="gift-box">🎟️</div>
+                    <div class="gift-label">Coupons</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="box-photo" class="screen">
+            <h1 class="cursive" style="font-size: 2.5rem;">Happy New Year</h1>
+            <div class="photo-frame">
+                <img src="my_photo.jpeg" alt="Us" onerror="this.src='https://placehold.co/300x350/png?text=Photo+Missing'">
+                <p style="margin: 5px 0 0 0; font-family: 'Dancing Script'; font-size: 1.2rem; color: #555;">January 1, 2026</p>
+            </div>
+            <button class="back-btn" onclick="nextScreen(3)">⬅ Back to Gifts</button>
+        </div>
+
+        <div id="box-video" class="screen">
+            <h1 class="cursive" style="font-size: 2.5rem;">Our Memories</h1>
+            <div class="video-wrapper">
+                <video controls>
+                    <source src="video.mp3.mp4" type="video/mp4">
+                    Your browser does not support video.
+                </video>
+            </div>
+            <button class="back-btn" onclick="nextScreen(3)">⬅ Back to Gifts</button>
+        </div>
+
+        <div id="box-letter" class="screen">
+            <div style="text-align: left; padding: 20px; background: #fffbfb; border-radius: 10px; width: 85%; border: 1px solid #f0f0f0;">
+                <h2 class="cursive" style="font-size: 2rem; margin-top: 0;">Dear Love,</h2>
+                <p style="line-height: 1.6; color: #555; font-size: 14px;">As the year turns, I hope you feel just how celebrated and cherished you are.</p>
+                <p style="line-height: 1.6; color: #555; font-size: 14px;">2025 was full of surprises, but I am so glad you were part of it with me.</p>
+            </div>
+
+            <div class="certificate">
+                <h3 style="font-family: serif; color: #555; font-size: 12px; letter-spacing: 2px;">CERTIFICATE OF LOVE</h3>
+                <p style="font-size: 12px;">Presented to:</p>
+                <h1 class="cursive" style="font-size: 2.5rem;">My Girlfriend</h1>
+                <p style="font-size: 12px; color: #666;">For being the most precious person I have ever had.</p>
+                <div class="badge">🥇</div>
+            </div>
+            <button class="back-btn" onclick="nextScreen(3)">⬅ Back to Gifts</button>
+        </div>
+
+        <div id="box-coupons" class="screen">
+            <h2 class="cursive" style="font-size: 2.5rem;">Love Coupons</h2>
+            <div class="coupon-grid">
+                <div class="coupon">Unlimited Hugs</div>
+                <div class="coupon">Your Wish</div>
+                <div class="coupon">Date Night</div>
+                <div class="coupon">Unlimited Kisses</div>
+                <div class="coupon">Movie Night</div>
+                <div class="coupon">Sorry Pass</div>
+            </div>
+            <button class="back-btn" onclick="nextScreen(3)">⬅ Back to Gifts</button>
+        </div>
+
+    </div>
+
+    <script>
+        const music = document.getElementById('bg-music');
+
+        function nextScreen(screenNumber) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById('screen' + screenNumber).classList.add('active');
+            
+            // Start music on the bear screen
+            if(screenNumber === 2) {
+                music.play().catch(e => console.log("Click needed for audio"));
+            }
+        }
+
+        function openBox(boxId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(boxId).classList.add('active');
+        }
+
+        function makeBearAngry() {
+            document.getElementById('bear-img').src = "angry.gif";
+            document.getElementById('question-text').innerText = "WHY DID YOU CLICK NO!";
+            document.getElementById('question-text').style.color = "#ff6b6b";
+            document.getElementById('btn-group').innerHTML = `<button class="btn yes-btn" onclick="resetBear()">TRY AGAIN 🔄</button>`;
+        }
+
+        function resetBear() {
+            document.getElementById('bear-img').src = "cute.gif";
+            document.getElementById('question-text').innerText = "PLS ACCEPT THE GIFT";
+            document.getElementById('question-text').style.color = "#333";
+            document.getElementById('btn-group').innerHTML = `<button class="btn yes-btn" onclick="nextScreen(3)">YES ❤️</button><button class="btn no-btn" onclick="makeBearAngry()">NO</button>`;
+        }
+    </script>
+</body>
+</html>
